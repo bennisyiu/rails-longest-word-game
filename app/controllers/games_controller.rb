@@ -3,9 +3,13 @@ require 'open-uri'
 class GamesController < ApplicationController
   def new
     @letters = []
-    10.times do
+    # vowels = ['a','e','i','o','u']
+    loop do
       letter = ('a'..'z').to_a[rand(26)]
-      @letters.push(letter)
+      if @letters.include?(letter) == false
+        @letters.push(letter)
+      end
+      break if @letters.length >= 10
     end
     return @letters
   end
@@ -15,13 +19,7 @@ class GamesController < ApplicationController
     @letters = params[:letters]
     @check1 = first_check(@answer, @letters)
     @check2 = second_check(@answer)
-    if @check1
-      # do the second check
-      @check2
-    end
-# The word can’t be built out of the original grid
-# The word is valid according to the grid, but is not a valid English word
-# The word is valid according to the grid and is an English word
+    @check1 ? @check2 : @check1
   end
 
   def first_check(answer,letters)
